@@ -64,7 +64,7 @@ abstract class Reducer implements WorkerInterface
     {
         $inputIterator = new InputIterator($this->app->offsetGet('reader'));
         while (!$inputIterator->isIterated()) {
-            $this->callback->call(
+            $this->reduce(
                 $this->app->offsetGet('emitter'),
                 $inputIterator->key(),
                 $inputIterator

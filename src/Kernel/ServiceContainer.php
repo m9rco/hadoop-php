@@ -77,7 +77,7 @@ class ServiceContainer extends Container
     public function getConfig()
     {
         $base = [
-            'bin'            => '/usr/bin/hadoop',
+            'bin'            => '/usr/local/bin/hdfs',
             'cache_dir'      => trim(`pwd`) . DIRECTORY_SEPARATOR . "cache",
             'job_name'       => 'default',
             'output'         => 'file', // mysql | file

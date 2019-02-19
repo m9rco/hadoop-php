@@ -1,4 +1,4 @@
-# Dotfiles
+# hadoop php
 
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=102)](https://travis-ci.org/m9rco/hadoop-php/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/m9rco/hadoop-php/pulls)
