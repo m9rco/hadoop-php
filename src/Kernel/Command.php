@@ -55,9 +55,11 @@ class Command
     }
 
     /**
-     * @param string       $cmd
-     * @param array|string $args
-     * @return mixed
+     * exec
+     *
+     * @param $cmd
+     * @param $args
+     * @return bool|string
      */
     public function exec($cmd, $args)
     {
@@ -65,6 +67,39 @@ class Command
         echo "{$this->prepareCmd($cmd)} {$this->prepareCmdArgs($args)}" . PHP_EOL;
         echo '-----------------------------------' . PHP_EOL;
         return system("{$this->prepareCmd($cmd)} {$this->prepareCmdArgs($args)}");
+    }
+
+    /**
+     * execHDFS
+     *
+     * @param $cmd
+     * @param $args
+     * @return bool|string
+     */
+    public function execHDFS($cmd,$args)
+    {
+        echo '-----------------------------------' . PHP_EOL;
+        echo "{$this->prepareHDFSCmd($cmd)} {$this->prepareCmdArgs($args)}" . PHP_EOL;
+        echo '-----------------------------------' . PHP_EOL;
+        return system("{$this->prepareHDFSCmd($cmd)} {$this->prepareCmdArgs($args)}");
+    }
+
+    /**
+     * prepareHDFSCmd
+     *
+     * @param $cmd
+     * @return mixed|string
+     */
+    protected function prepareHDFSCmd($cmd)
+    {
+        $result = (string)$cmd;
+        if (strpos($result, '%hdfs%') === false) {
+            $result = "{$this->hdfsBin} $result";
+        } else {
+            $result = str_replace('%hdfs%', $this->hdfsBin, $result);
+        }
+
+        return $result;
     }
 
     /**

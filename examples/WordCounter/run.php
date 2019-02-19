@@ -1,12 +1,13 @@
 <?php
 
-require __DIR__ . '/../../vendor/autoload.php';
-require __DIR__ . DIRECTORY_SEPARATOR . 'Mapper.php';
-require __DIR__ . DIRECTORY_SEPARATOR . 'Reducer.php';
+require dirname(__FILE__) . '/../../vendor/autoload.php';
+require dirname(__FILE__) . '/Mapper.php';
+require dirname(__FILE__) . '/Reducer.php';
 
 $options = array (
-    'bin'            => 'hadoop', // which hdfs
-    'streaming_bin'  => '/usr/bin/hadoop/hadoop-streaming.jar',
+    'bin'            => 'hadoop-x', // which hdfs
+    'hdfs_bin'       => 'hdfs-x', // which hdfs
+    'streaming_bin'  => '/usr/local/Cellar/hadoop/3.1.1/libexec/libexec/tools/hadoop-streaming.sh',
     'job_name'       => 'default',
     'output'         => 'mysql', // mysql | file
     'output_path'    => './',

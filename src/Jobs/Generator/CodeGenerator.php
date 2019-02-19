@@ -4,6 +4,8 @@ namespace PHPHadoop\Jobs\Generator;
 use Composer\Autoload\ClassLoader;
 use PHPHadoop\Jobs\Contracts\WorkerInterface;
 use Pimple\Container;
+use Phar;
+use FilesystemIterator;
 
 /**
  * CodeGenerator
@@ -17,12 +19,21 @@ class CodeGenerator
     /**
      * @var string
      */
+    protected $rootDir;
+    /**
+     * @var string
+     */
     protected $templatesPath;
 
     /**
      * @var string
      */
     protected $composerAutoload;
+
+    /**
+     * @var
+     */
+    protected $app;
 
     /**
      * CodeGenerator constructor.
@@ -32,10 +43,12 @@ class CodeGenerator
      */
     public function __construct(Container $app)
     {
+        $this->app              = $app;
         $classReflection        = new \ReflectionClass(ClassLoader::class);
         $this->composerAutoload = dirname(dirname($classReflection->getFileName()))
                                   . DIRECTORY_SEPARATOR
                                   . 'autoload.php';
+        $this->rootDir          = dirname(dirname($this->composerAutoload));
         $thisReflection         = new \ReflectionClass($this);
         $thisPath               = $thisReflection->getFileName();
         $this->templatesPath    = substr($thisPath, 0, strpos($thisPath, 'CodeGenerator.php'));
@@ -62,5 +75,28 @@ class CodeGenerator
         $script = str_replace('%ProjectWorkerClassName%', $workerClassName, $script);
 
         file_put_contents($outputFile, $script);
+        $file = $workerClassName . '.phar';
+        $phar = new Phar(
+            dirname($outputFile) . DIRECTORY_SEPARATOR . $file,
+            FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::KEY_AS_FILENAME,
+            $file
+        );
+
+        $outputFile = str_replace($this->rootDir, '', $outputFile);
+        // 开始打包
+        $phar->startBuffering();
+        echo 'start ------------------' . $workerClassName . '-----------------' . PHP_EOL;
+        $phar->buildFromDirectory($this->rootDir, '/\.php$/');
+        $stub = <<<EOF
+<?php
+Phar::mapPhar('{$file}');
+require 'phar://{$file}{$outputFile}';
+__HALT_COMPILER();
+?>");
+EOF;
+        $phar->setStub($stub);
+        $phar->compressFiles(Phar::GZ);
+        $phar->stopBuffering();
+        echo 'end ------------------' . $workerClassName . '-----------------' . PHP_EOL;
     }
 }

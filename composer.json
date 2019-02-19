@@ -17,8 +17,9 @@
   ],
   "require": {
     "php": ">=5.3.0",
-    "monolog/monolog": "^1.22",
+    "kherge/box": "*",
     "pimple/pimple": "^3.0",
+    "seld/phar-utils": "^1.0",
     "symfony/class-loader": "~3"
   },
   "require-dev": {

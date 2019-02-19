@@ -2,7 +2,6 @@
 <?php
 
 defined('DEBUG') || define('DEBUG', %DEBUG_TEMPLATE%);
-
 require '%UniversalClassLoaderPath%';
 require '%WorkerFilePath%';
 

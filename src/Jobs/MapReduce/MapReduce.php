@@ -286,13 +286,13 @@ class MapReduce
         $jobParams = array_merge($jobParams, array (
             'input'   => $this->name . '/tasks/*',
             'output'  => $this->name . '/results',
-            'mapper'  => $this->cacheDir . '/Mapper.php',
-            'reducer' => $this->cacheDir . '/Reducer.php',
+            'mapper'  => $this->cacheDir . '/Mapper.phar',
+            'reducer' => $this->cacheDir . '/Reducer.phar',
         ));
 
         if ($this->hasCombiner()) {
             $this->getCodeGenerator()->generateScript($this->combiner, $this->cacheDir . '/Combiner.php');
-            $jobParams['combiner'] = $this->cacheDir . '/Combiner.php';
+            $jobParams['combiner'] = $this->cacheDir . '/Combiner.phpar';
         }
 
         $this->command->exec('jar', $jobParams);

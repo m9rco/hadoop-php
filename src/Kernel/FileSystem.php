@@ -37,13 +37,27 @@ class FileSystem
     }
 
     /**
-     * @param string       $cmd
-     * @param string|array $args
+     * exec
+     *
+     * @param $cmd
+     * @param $args
      * @return mixed
      */
     private function exec($cmd, $args)
     {
         return $this->command->exec("dfs -$cmd", $args);
+    }
+
+    /**
+     * execHDFS
+     *
+     * @param $cmd
+     * @param $args
+     * @return mixed
+     */
+    private function execHDFS($cmd, $args)
+    {
+        return $this->command->execHDFS("-$cmd", $args);
     }
 
     /**
@@ -63,8 +77,10 @@ class FileSystem
         }
 
         if (is_string($content)) {
-            return $this->command->exec('printf "' . str_replace('"', '\"',
-                    str_replace('\\', '\\\\', $content)) . '" | %hadoop% dfs -put', array ('-', $filePath));
+            return $this->command->exec(
+                'printf "' .
+                str_replace('"', '\"', str_replace('\\', '\\\\', $content)) .
+                '" | %hadoop% dfs -put', $filePath);
         }
 
         throw new UnexpectedValueException(sprintf('Invalid content type "%s"',
@@ -90,7 +106,7 @@ class FileSystem
      */
     public function copyToLocal($hdfsFilePath, $localFilePath)
     {
-        return $this->exec('get', array ($hdfsFilePath, $localFilePath));
+        return $this->execHDFS('get', array ($hdfsFilePath, $localFilePath));
     }
 
     /**
@@ -100,7 +116,7 @@ class FileSystem
      */
     public function remove($hdfsPath, $recursive = false)
     {
-        return $this->exec($recursive ? 'rmr' : 'rm', $hdfsPath);
+        return $this->execHDFS($recursive ? 'rm -r' : 'rm', $hdfsPath);
     }
 
     /**
@@ -109,6 +125,6 @@ class FileSystem
      */
     public function displayFileContent($hdfsFilePath)
     {
-        return $this->exec('cat', $hdfsFilePath);
+        return $this->execHDFS('cat', $hdfsFilePath);
     }
 }
