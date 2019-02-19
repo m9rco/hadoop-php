@@ -358,8 +358,9 @@ class MapReduce
      */
     private function getHadoopStreamingJarPath()
     {
-        $streamingDirPath = "{$this->command->getHadoopPath()}/contrib/streaming";
-        return $streamingDirPath . '/' . system("ls $streamingDirPath | grep \"hadoop-streaming.*\.jar\"");
+        return $this->app->offsetGet('config')['streaming_bin'];
+//       $streamingDirPath = "{$this->command->getHadoopPath()}/contrib/streaming";
+//      return $streamingDirPath . '/' . system("ls $streamingDirPath | grep \"hadoop-streaming.*\.jar\"");
     }
 
     /**

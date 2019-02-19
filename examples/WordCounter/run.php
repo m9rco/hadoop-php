@@ -5,7 +5,8 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'Mapper.php';
 require __DIR__ . DIRECTORY_SEPARATOR . 'Reducer.php';
 
 $options = array (
-    'bin'            => '/usr/local/bin/hdfs', // which hdfs
+    'bin'            => 'hadoop', // which hdfs
+    'streaming_bin'  => '/usr/bin/hadoop/hadoop-streaming.jar',
     'job_name'       => 'default',
     'output'         => 'mysql', // mysql | file
     'output_path'    => './',
@@ -42,7 +43,7 @@ try {
     $mr->clearData()
        ->addTask('Hello World')
        ->addTask('Hello Hadoop')
-       ->putResultsTo('Temp/result.log')
+       ->putResultsTo('cache/result.log')
        ->run();
 } catch (\PHPHadoop\Kernel\Exceptions\UnexpectedValueException $e) {
 } catch (ReflectionException $e) {

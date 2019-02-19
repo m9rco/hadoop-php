@@ -78,6 +78,7 @@ class ServiceContainer extends Container
     {
         $base = [
             'bin'            => '/usr/local/bin/hdfs',
+            'streaming_bin'  => '/usr/bin/hadoop/hadoop-streaming.jar',
             'cache_dir'      => trim(`pwd`) . DIRECTORY_SEPARATOR . "cache",
             'job_name'       => 'default',
             'output'         => 'file', // mysql | file

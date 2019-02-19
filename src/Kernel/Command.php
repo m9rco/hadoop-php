@@ -29,6 +29,10 @@ class Command
      * @var string
      */
     protected $hadoopBin;
+    /**
+     * @var string
+     */
+    protected $hdfsBin;
 
     /**
      * Command constructor.
@@ -39,6 +43,7 @@ class Command
     {
         $this->app       = $app;
         $this->hadoopBin = $this->app['config']['bin'];
+        $this->hdfsBin   = $this->app['config']['hdfs_bin'];
     }
 
     /**
@@ -56,6 +61,9 @@ class Command
      */
     public function exec($cmd, $args)
     {
+        echo '-----------------------------------' . PHP_EOL;
+        echo "{$this->prepareCmd($cmd)} {$this->prepareCmdArgs($args)}" . PHP_EOL;
+        echo '-----------------------------------' . PHP_EOL;
         return system("{$this->prepareCmd($cmd)} {$this->prepareCmdArgs($args)}");
     }
 
