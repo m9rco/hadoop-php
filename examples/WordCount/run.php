@@ -7,7 +7,6 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'Reducer.php';
 $options = array (
     'bin'            => '/usr/local/bin/hdfs', // which hdfs
     'job_name'       => 'default',
-    'cache_dir'      => 'Temp',
     'output'         => 'mysql', // mysql | file
     'output_path'    => './',
     'databases'      => array (
