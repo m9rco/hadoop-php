@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+defined('DEBUG') || define('DEBUG', %DEBUG_TEMPLATE%);
+
+require '%UniversalClassLoaderPath%';
+require '%WorkerFilePath%';
+
+$worker = new %ProjectWorkerClassName%(new PHPHadoop\Jobs\Application());
+$worker->handle();
