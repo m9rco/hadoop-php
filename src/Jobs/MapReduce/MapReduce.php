@@ -196,6 +196,14 @@ class MapReduce
         return $this;
     }
 
+    public function addLocalTest($file)
+    {
+        $this->taskCounter++;
+        $taskHdfsFilePath = "{$this->getHdfsTasksDir()}/{$this->taskCounter}.tsk";
+        $this->fileSystem->writeToFile($file, $taskHdfsFilePath);
+        return $this;
+    }
+
     /**
      * prepareTaskFromFile
      *
@@ -278,7 +286,7 @@ class MapReduce
         $this->getCodeGenerator()->generateScript($this->mapper, $this->cacheDir . '/Mapper.php');
         $this->getCodeGenerator()->generateScript($this->reducer, $this->cacheDir . '/Reducer.php');
 
-        $jobParams = array ($this->getHadoopStreamingJarPath());// , '-D mapred.output.compress=false'
+        $jobParams = array ($this->getHadoopStreamingJarPath(), '-D mapred.output.compress=false');
         foreach ($this->streamingOptions as $option => $value) {
             $jobParams[] = "-D $option=$value";
         }
