@@ -76,7 +76,7 @@ class Command
      * @param $args
      * @return bool|string
      */
-    public function execHDFS($cmd,$args)
+    public function execHDFS($cmd, $args)
     {
         echo '-----------------------------------' . PHP_EOL;
         echo "{$this->prepareHDFSCmd($cmd)} {$this->prepareCmdArgs($args)}" . PHP_EOL;
@@ -134,9 +134,11 @@ class Command
                 $arg    = (string)$arg;
                 $result .= " -$arg";
             }
-
             $value  = (string)$value;
             $result .= " $value";
+            if (in_array($arg, array ('mapper', 'reducer'))) {
+                $result .= " -file $value";
+            }
         }
 
         return trim($result);

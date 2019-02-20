@@ -75,19 +75,22 @@ class CodeGenerator
         $script = str_replace('%ProjectWorkerClassName%', $workerClassName, $script);
 
         file_put_contents($outputFile, $script);
-        $file = $workerClassName . '.phar';
-        $phar = new Phar(
+        $pharFile = str_replace('.php', '.phar', $outputFile);
+        if (file_exists($pharFile)) {
+            unlink($pharFile);
+        }
+        $file       = $workerClassName . '.phar';
+        $phar       = new Phar(
             dirname($outputFile) . DIRECTORY_SEPARATOR . $file,
             FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::KEY_AS_FILENAME,
             $file
         );
-
         $outputFile = str_replace($this->rootDir, '', $outputFile);
         // 开始打包
         $phar->startBuffering();
-        echo 'start ------------------' . $workerClassName . '-----------------' . PHP_EOL;
         $phar->buildFromDirectory($this->rootDir, '/\.php$/');
         $stub = <<<EOF
+#!/usr/bin/env php
 <?php
 Phar::mapPhar('{$file}');
 require 'phar://{$file}{$outputFile}';
@@ -97,6 +100,6 @@ EOF;
         $phar->setStub($stub);
         $phar->compressFiles(Phar::GZ);
         $phar->stopBuffering();
-        echo 'end ------------------' . $workerClassName . '-----------------' . PHP_EOL;
+        chmod($pharFile, 0770);
     }
 }

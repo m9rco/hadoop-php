@@ -31,7 +31,7 @@ class MapReduce
     private $name;
 
     /**
-     * @var mixed
+     * @var \PHPHadoop\Kernel\Command
      */
     private $command;
 
