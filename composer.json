@@ -17,10 +17,7 @@
   ],
   "require": {
     "php": ">=5.3.0",
-    "kherge/box": "*",
-    "pimple/pimple": "^3.0",
-    "seld/phar-utils": "^1.0",
-    "symfony/class-loader": "~3"
+    "pimple/pimple": "^3.0"
   },
   "require-dev": {
     "mockery/mockery": "^1.0",
