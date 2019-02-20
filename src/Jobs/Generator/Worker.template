@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 
 defined('DEBUG') || define('DEBUG', %DEBUG_TEMPLATE%);
