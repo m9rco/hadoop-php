@@ -68,18 +68,20 @@ class CodeGenerator
         $workerReflectionClass = new \ReflectionClass($worker);
         $workerClassName       = $workerReflectionClass->getShortName();
         $workerFileName        = $workerReflectionClass->getFileName();
-
-        $script = str_replace('%DEBUG_TEMPLATE%', defined('DEBUG') && DEBUG ? 'true' : 'false', $script);
-        $script = str_replace('%UniversalClassLoaderPath%', $this->composerAutoload, $script);
-        $script = str_replace('%WorkerFilePath%', $workerFileName, $script);
-        $script = str_replace('%ProjectWorkerClassName%', $workerClassName, $script);
+        $file                  = $workerClassName . '.phar';
+        $script                = str_replace('%DEBUG_TEMPLATE%', defined('DEBUG') && DEBUG ? 'true' : 'false', $script);
+        $script                = str_replace('%UniversalClassLoaderPath%',
+            str_replace($this->rootDir, "phar://{$file}", $this->composerAutoload), $script);
+        $script                = str_replace('%WorkerFilePath%',
+            str_replace($this->rootDir, "phar://{$file}", $workerFileName),
+            $script);
+        $script                = str_replace('%ProjectWorkerClassName%', $workerClassName, $script);
 
         file_put_contents($outputFile, $script);
         $pharFile = str_replace('.php', '.phar', $outputFile);
         if (file_exists($pharFile)) {
             unlink($pharFile);
         }
-        $file       = $workerClassName . '.phar';
         $phar       = new Phar(
             dirname($outputFile) . DIRECTORY_SEPARATOR . $file,
             FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::KEY_AS_FILENAME,
