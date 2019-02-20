@@ -6,7 +6,7 @@ require dirname(__FILE__) . '/Reducer.php';
 
 $options = array (
     'bin'            => 'hadoop-x', // which hdfs
-    'hdfs_bin'       => 'hdfs-x', // which hdfs
+    'php'           => '/usr/local/php7/bin/php',
     'streaming_bin'  => '/usr/local/Cellar/hadoop/3.1.1/libexec/libexec/tools/hadoop-streaming.sh',
     'job_name'       => 'default',
     'output'         => 'mysql', // mysql | file

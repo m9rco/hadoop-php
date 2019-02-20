@@ -78,7 +78,7 @@ class ServiceContainer extends Container
     {
         $base = [
             'bin'            => 'hadoop',
-            'hdfs_bin'       => 'hdfs',
+            'php'            => 'php',
             'streaming_bin'  => '/usr/bin/hadoop/hadoop-streaming.jar',
             'cache_dir'      => trim(`pwd`) . DIRECTORY_SEPARATOR . "cache",
             'job_name'       => 'default',

@@ -91,8 +91,9 @@ class CodeGenerator
         // 开始打包
         $phar->startBuffering();
         $phar->buildFromDirectory($this->rootDir, '/\.php$/');
-        $stub = <<<EOF
-#!/usr/local/php7/bin/php
+        $phpBin = $this->app['config']['php'];
+        $stub   = <<<EOF
+#!{$phpBin}
 <?php
 Phar::mapPhar('{$file}');
 require 'phar://{$file}{$outputFile}';
