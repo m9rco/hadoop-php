@@ -11,7 +11,6 @@ namespace PHPHadoop\Jobs\Worker;
 
 use PHPHadoop\Jobs\IO\Emitter;
 use Pimple\Container;
-use PHPHadoop\Jobs\Traits\Worker;
 use PHPHadoop\Jobs\Contracts\WorkerInterface;
 
 /**
@@ -23,7 +22,6 @@ use PHPHadoop\Jobs\Contracts\WorkerInterface;
  */
 abstract class Mapper implements WorkerInterface
 {
-    use Worker;
     /**
      * @var
      */

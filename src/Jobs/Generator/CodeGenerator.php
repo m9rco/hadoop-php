@@ -92,12 +92,12 @@ class CodeGenerator
         $phar->startBuffering();
         $phar->buildFromDirectory($this->rootDir, '/\.php$/');
         $stub = <<<EOF
-#!/usr/bin/env php
+#!/usr/local/php7/bin/php
 <?php
 Phar::mapPhar('{$file}');
 require 'phar://{$file}{$outputFile}';
 __HALT_COMPILER();
-?>");
+");
 EOF;
         $phar->setStub($stub);
         $phar->compressFiles(Phar::GZ);

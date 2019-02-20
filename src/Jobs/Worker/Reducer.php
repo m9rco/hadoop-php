@@ -10,7 +10,6 @@
 namespace PHPHadoop\Jobs\Worker;
 
 use PHPHadoop\Jobs\IO\Emitter;
-use PHPHadoop\Jobs\Traits\Worker;
 use PHPHadoop\Jobs\IO\InputIterator;
 use Pimple\Container;
 use PHPHadoop\Jobs\Contracts\WorkerInterface;
@@ -24,8 +23,6 @@ use PHPHadoop\Jobs\Contracts\WorkerInterface;
  */
 abstract class Reducer implements WorkerInterface
 {
-    use Worker;
-
     /**
      * @var
      */
