@@ -196,14 +196,6 @@ class MapReduce
         return $this;
     }
 
-    public function addLocalTest($file)
-    {
-        $this->taskCounter++;
-        $taskHdfsFilePath = "{$this->getHdfsTasksDir()}/{$this->taskCounter}.tsk";
-        $this->fileSystem->writeToFile($file, $taskHdfsFilePath);
-        return $this;
-    }
-
     /**
      * prepareTaskFromFile
      *

@@ -80,7 +80,7 @@ class FileSystem
             return $this->command->exec(
                 'printf "' .
                 str_replace('"', '\"', str_replace('\\', '\\\\', $content)) .
-                '" | %hadoop% dfs -put', $filePath);
+                '" | %hadoop% dfs -put -', $filePath);
         }
 
         throw new UnexpectedValueException(sprintf('Invalid content type "%s"',
