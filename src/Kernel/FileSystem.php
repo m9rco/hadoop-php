@@ -57,7 +57,7 @@ class FileSystem
      */
     private function execHDFS($cmd, $args)
     {
-        return $this->command->execHDFS("-$cmd", $args);
+        return $this->command->exec("-$cmd", $args);
     }
 
     /**
@@ -106,7 +106,7 @@ class FileSystem
      */
     public function copyToLocal($hdfsFilePath, $localFilePath)
     {
-        return $this->execHDFS('get', array ($hdfsFilePath, $localFilePath));
+        return $this->exec('get', array ($hdfsFilePath, $localFilePath));
     }
 
     /**
@@ -116,7 +116,7 @@ class FileSystem
      */
     public function remove($hdfsPath, $recursive = false)
     {
-        return $this->execHDFS($recursive ? 'rm -r' : 'rm', $hdfsPath);
+        return $this->exec($recursive ? 'rm -r' : 'rm', $hdfsPath);
     }
 
     /**
@@ -125,6 +125,6 @@ class FileSystem
      */
     public function displayFileContent($hdfsFilePath)
     {
-        return $this->execHDFS('cat', $hdfsFilePath);
+        return $this->exec('cat', $hdfsFilePath);
     }
 }
