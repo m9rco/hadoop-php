@@ -23,7 +23,7 @@ class Reducer extends PHPHadoop\Jobs\Worker\Reducer
         foreach ($values as $value) {
             $result += (int)$value;
         }
-
-        $emitter->emit($key, $result);}
+        $emitter->emit($key, $result);
+    }
 
 }

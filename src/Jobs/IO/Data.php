@@ -44,7 +44,7 @@ class Data
     /**
      * @var \Phadoop\MapReduce\Job\IO\Encoder
      */
-    private static $_encoder;
+    private static $encoder;
 
     /**
      * @static
@@ -64,7 +64,7 @@ class Data
      */
     public static function setEncoder(Encoder $encoder)
     {
-        self::$_encoder = $encoder;
+        self::$encoder = $encoder;
     }
 
     /**
@@ -75,11 +75,11 @@ class Data
      */
     protected static function getEncoder()
     {
-        if (is_null(self::$_encoder)) {
-            self::$_encoder = new Encoder();
+        if (is_null(self::$encoder)) {
+            self::$encoder = new Encoder();
         }
 
-        return self::$_encoder;
+        return self::$encoder;
     }
 
     /**
