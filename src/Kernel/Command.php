@@ -129,6 +129,7 @@ class Command
         }
 
         $result = '';
+        $files  = array ();
         foreach ($args as $arg => $value) {
             if (!is_int($arg)) {
                 $arg    = (string)$arg;
@@ -137,9 +138,14 @@ class Command
             $value  = (string)$value;
             $result .= " $value";
             if (in_array($arg, array ('mapper', 'reducer'))) {
-                $result .= " -file $value";
+                array_push($files, $value);
             }
         }
+
+        foreach ($files as $item) {
+            $result .= " -file {$item}";
+        }
+
 
         return trim($result);
     }
