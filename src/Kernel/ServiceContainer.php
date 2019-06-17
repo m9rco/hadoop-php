@@ -11,6 +11,8 @@ namespace PHPHadoop\Kernel;
 
 use PHPHadoop\Kernel\Providers\CommandServiceProvider;
 use PHPHadoop\Kernel\Providers\ConfigServiceProvider;
+use PHPHadoop\Kernel\Providers\DatabasesServiceProvider;
+use PHPHadoop\Kernel\Providers\ElasticSearchServiceProvider;
 use PHPHadoop\Kernel\Providers\FileSystemServiceProvider;
 use Pimple\Container;
 
@@ -77,15 +79,14 @@ class ServiceContainer extends Container
     public function getConfig()
     {
         $base = [
-            'bin'            => 'hadoop',
-            'php'            => system('which php'),
-            'streaming_bin'  => '/usr/bin/hadoop/hadoop-streaming.jar',
-            'cache_dir'      => trim(`pwd`) . DIRECTORY_SEPARATOR . "cache",
-            'job_name'       => 'default',
-            'output'         => 'file', // mysql | file
-            'output_path'    => './',
-            'databases'      => array (),
-            'elastic_search' => array (),
+            'bin'           => 'hadoop',
+            'php'           => '/usr/local/bin/php',
+            'streaming_bin' => '/usr/bin/hadoop/hadoop-streaming.jar',
+            'cache_dir'     => trim(`pwd`) . DIRECTORY_SEPARATOR . "cache",
+            'db_conf'       => array (),
+            'es_conf'       => array (),
+            'output'        => null,
+            'input'         => null,
         ];
 
         return array_replace_recursive($base, $this->defaultConfig, $this->userConfig);
@@ -102,6 +103,8 @@ class ServiceContainer extends Container
             CommandServiceProvider::class,
             ConfigServiceProvider::class,
             FileSystemServiceProvider::class,
+            DatabasesServiceProvider::class,
+            ElasticSearchServiceProvider::class,
         ], $this->providers);
     }
 

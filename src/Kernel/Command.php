@@ -65,6 +65,7 @@ class Command
     {
         echo '-----------------------------------' . PHP_EOL;
         echo "{$this->prepareCmd($cmd)} {$this->prepareCmdArgs($args)}" . PHP_EOL;
+        die;
         echo '-----------------------------------' . PHP_EOL;
         return system("{$this->prepareCmd($cmd)} {$this->prepareCmdArgs($args)}");
     }

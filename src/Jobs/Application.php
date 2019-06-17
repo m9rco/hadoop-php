@@ -28,7 +28,5 @@ class Application extends ServiceContainer
         Generator\ServiceProvider::class,
         IO\ServiceProvider::class,
         MapReduce\ServiceProvider::class,
-        Databases\ServiceProvider::class,
-        ElasticSearch\ServiceProvider::class,
     );
 }

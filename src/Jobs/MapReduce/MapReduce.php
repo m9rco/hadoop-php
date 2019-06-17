@@ -36,7 +36,7 @@ class MapReduce
     private $command;
 
     /**
-     * @var mixed
+     * @var \PHPHadoop\Kernel\FileSystem
      */
     private $fileSystem;
     /**
@@ -85,6 +85,21 @@ class MapReduce
     private $codeGenerator;
 
     /**
+     * @var mixed
+     */
+    protected $inputParams;
+
+    /**
+     * @var mixed
+     */
+    protected $outputParams;
+
+    /**
+     * @var mixed
+     */
+    protected $result;
+
+    /**
      * @var \Pimple\Container
      */
     protected $app;
@@ -97,14 +112,19 @@ class MapReduce
      */
     public function __construct(Container $app)
     {
-        $this->app         = $app;
-        $config            = $app->offsetGet('config');
-        $this->command     = $app->offsetGet('command');
-        $this->fileSystem  = $app->offsetGet('file_system');
-        $this->taskCounter = 0;
-        $this->name        = $config['job_name'];
+
+        $this->app = $app;
+
+        $config             = $app->offsetGet('config');
+        $this->command      = $app->offsetGet('command');
+        $this->fileSystem   = $app->offsetGet('file_system');
+        $this->outputParams = $config->offsetGet('output');
+        $this->inputParams  = $config->offsetGet('input');
+        $this->result       = $config->offsetGet('result');
+        $this->taskCounter  = 0;
         $this->setCacheDir($config['cache_dir']);
         $this->streamingOptions = array ();
+
     }
 
     /**
@@ -165,9 +185,9 @@ class MapReduce
      *
      * @return $this
      */
-    public function clearData()
+    public function clearData($filePath = '')
     {
-        $this->fileSystem->remove($this->name, true);
+        $this->fileSystem->remove($filePath ?? $this->name, true);
         return $this;
     }
 
@@ -258,6 +278,10 @@ class MapReduce
      */
     public function setStreamingOption($option, $value)
     {
+        if ($value === false) {
+            $value = 'false';
+        }
+
         $this->streamingOptions[(string)$option] = (string)$value;
         return $this;
     }
@@ -274,21 +298,20 @@ class MapReduce
         $this->assertCacheDirIsSet();
         $this->assertMapperIsSet();
         $this->assertReducerIsSet();
-
         $this->getCodeGenerator()->generateScript($this->mapper, $this->cacheDir . '/Mapper.php');
         $this->getCodeGenerator()->generateScript($this->reducer, $this->cacheDir . '/Reducer.php');
-
-        $jobParams = array ($this->getHadoopStreamingJarPath(), '-D mapred.output.compress=false');
         foreach ($this->streamingOptions as $option => $value) {
             $jobParams[] = "-D $option=$value";
         }
 
-        $jobParams = array_merge($jobParams, array (
+        $jobParams           = array (
             'input'   => $this->name . '/tasks/*',
             'output'  => $this->name . '/results',
             'mapper'  => $this->cacheDir . '/Mapper.phar',
             'reducer' => $this->cacheDir . '/Reducer.phar',
-        ));
+        );
+        $jobParams['input']  = $this->inputParams ?? $this->name . '/tasks/*';
+        $jobParams['output'] = $this->outputParams ?? $this->name . '/results';
 
         if ($this->hasCombiner()) {
             $this->getCodeGenerator()->generateScript($this->combiner, $this->cacheDir . '/Combiner.php');
@@ -296,8 +319,9 @@ class MapReduce
         }
 
         $this->command->exec('jar', $jobParams);
-        $this->rememberResults();
-
+        if ($this->result) {
+            $this->rememberResults();
+        }
         return $this;
     }
 
