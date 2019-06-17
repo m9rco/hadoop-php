@@ -301,15 +301,15 @@ class MapReduce
         $this->getCodeGenerator()->generateScript($this->mapper, $this->cacheDir . '/Mapper.php');
         $this->getCodeGenerator()->generateScript($this->reducer, $this->cacheDir . '/Reducer.php');
         foreach ($this->streamingOptions as $option => $value) {
-            $jobParams[] = "-D $option=$value";
+            $streamingOptions[] = "-D $option=$value";
         }
 
-        $jobParams           = array (
+        $jobParams           = array_merge($streamingOptions, array (
             'input'   => $this->name . '/tasks/*',
             'output'  => $this->name . '/results',
             'mapper'  => $this->cacheDir . '/Mapper.phar',
             'reducer' => $this->cacheDir . '/Reducer.phar',
-        );
+        ));
         $jobParams['input']  = $this->inputParams ?? $this->name . '/tasks/*';
         $jobParams['output'] = $this->outputParams ?? $this->name . '/results';
 
@@ -318,7 +318,7 @@ class MapReduce
             $jobParams['combiner'] = $this->cacheDir . '/Combiner.phpar';
         }
 
-        $this->command->exec('jar', $jobParams);
+        $this->command->exec('jar '. $this->getHadoopStreamingJarPath(), $jobParams);
         if ($this->result) {
             $this->rememberResults();
         }
